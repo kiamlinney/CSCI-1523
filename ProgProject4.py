@@ -24,24 +24,27 @@ with open("/var/log/message", "r") as message:
 with open("/var/log/syslog", "r") as syslog:
     read_sys_lines = syslog.readlines()
 
-class Window1(EasyFrame):
-
+class FileSearch(EasyFrame):
     def __init__(self):
         bg = "powderblue"
         EasyFrame.__init__(self, width = 700, height = 500, title = "CSCI 1523, Assignment #4 - Liam Kinney", background = bg)
         self.addLabel(font = ("Avenir", 18, "bold"), text = "CSCI 1523 - Assignment #4", row = 0, column = 0, columnspan = 5, sticky = "NSEW", foreground = "black", background = bg)
 
         self.addLabel(font = ("Avenir", 16, "italic"), text = "Log file:", row = 2, column = 0, sticky = "NEW", background = bg)
-        self.logFile = self.addTextField(text = "", row = 2, column = 3, sticky = "NEW", state = "readonly")
+        logFile = self.logFile = self.addTextField(text = "", row = 2, column = 3, sticky = "NEW", state = "readonly")
+        logFile["foreground"] = "black"
 
         self.addLabel(font = ("Avenir", 16, "italic"), text = "Date of First Record:", row = 2, column = 0, sticky = "EW", background = bg)
-        self.firstDate = self.addTextField(text = "", row = 2, column = 3, sticky = "EW", state = "readonly")
+        firstRecord = self.firstDate = self.addTextField(text = "", row = 2, column = 3, sticky = "EW", state = "readonly")
+        firstRecord["foreground"] = "black"
 
         self.addLabel(font = ("Avenir", 16, "italic"), text = "Date of Last Record:", row = 2, column = 0, columnspan = 2, sticky = "SEW", background = bg)
-        self.lastDate = self.addTextField(text = "", row = 2, column = 3, sticky = "SEW", state = "readonly")
+        lastRecord = self.lastDate = self.addTextField(text = "", row = 2, column = 3, sticky = "SEW", state = "readonly")
+        lastRecord["foreground"] = "black"
 
         self.addLabel(font = ("Avenir", 16, "italic"), text = "Number of Records:", row = 3, column = 0, columnspan = 2, sticky = "NEW", background = bg)
-        self.numRecords = self.addTextField(text = "", row = 3, column = 3, sticky = "NEW", state = "readonly")
+        numRecords = self.numRecords = self.addTextField(text = "", row = 3, column = 3, sticky = "NEW", state = "readonly")
+        numRecords["foreground"] = "black"
 
         self.addLabel(font = ("Avenir", 16), text = "Relavent Records", row = 3, column = 0, columnspan = 5, sticky = "SEW", background = bg)
         listBox = self.loginAttempts = self.addListbox(row = 4, column = 3)
@@ -71,7 +74,7 @@ class Window1(EasyFrame):
             self.numRecords.setText(total_lines)
             self.logFile.setText("/var/log/auth.log")
     
-            if "/etc/apt/sources.list" in i:
+            if "vim" and "sources.list" in i:
                 self.loginAttempts.insert(END, i)
 
     def message(self):
@@ -111,6 +114,6 @@ class Window1(EasyFrame):
                 self.loginAttempts.insert(END, i)
             
 def main():
-    Window1().mainloop()
+    FileSearch().mainloop()
 if __name__ == "__main__":
     main()
