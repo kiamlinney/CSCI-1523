@@ -17,11 +17,18 @@ contain the string ”rtkit".
 from breezypythongui import EasyFrame
 from tkinter import END
 
-with open ("/var/log/auth.log", "r") as authlog:
+#with open ("/var/log/auth.log", "r") as authlog:
+#    read_auth_lines = authlog.readlines()
+#with open("/var/log/messages", "r") as messages:
+#    read_msg_lines = message.readlines()
+#with open("/var/log/syslog", "r") as syslog:
+#    read_sys_lines = syslog.readlines()
+
+with open ("auth.log", "r") as authlog:
     read_auth_lines = authlog.readlines()
-with open("/var/log/message", "r") as message:
-    read_msg_lines = message.readlines()
-with open("/var/log/syslog", "r") as syslog:
+with open("messages", "r") as messages:
+    read_msg_lines = messages.readlines()
+with open("syslog", "r") as syslog:
     read_sys_lines = syslog.readlines()
 
 class FileSearch(EasyFrame):
@@ -56,7 +63,7 @@ class FileSearch(EasyFrame):
         fileMenu["foreground"] = "black"
         fileMenu["font"] = "Avenir", 15
         fileMenu.addMenuItem("auth.log", command = self.authlog)
-        fileMenu.addMenuItem("message", command = self.message)
+        fileMenu.addMenuItem("messages", command = self.messages)
         fileMenu.addMenuItem("syslog", command = self.syslog)
     
     def authlog(self):
@@ -77,7 +84,7 @@ class FileSearch(EasyFrame):
             if "vim" and "sources.list" in i:
                 self.loginAttempts.insert(END, i)
 
-    def message(self):
+    def messages(self):
         first_msg_line = read_msg_lines[0]
         last_msg_line = read_msg_lines[-1]
         total_lines = 0
@@ -90,7 +97,7 @@ class FileSearch(EasyFrame):
             self.firstDate.setText(first_date)
             self.lastDate.setText(last_date)
             self.numRecords.setText(total_lines)
-            self.logFile.setText("/var/log/message")
+            self.logFile.setText("/var/log/messages")
             
             if "notepad-plus-plus" in i:
                 self.loginAttempts.insert(END, i)
