@@ -17,18 +17,11 @@ contain the string ”rtkit".
 from breezypythongui import EasyFrame
 from tkinter import END
 
-#with open ("/var/log/auth.log", "r") as authlog:
-#    read_auth_lines = authlog.readlines()
-#with open("/var/log/messages", "r") as messages:
-#    read_msg_lines = message.readlines()
-#with open("/var/log/syslog", "r") as syslog:
-#    read_sys_lines = syslog.readlines()
-
-with open ("auth.log", "r") as authlog:
+with open ("/var/log/auth.log", "r") as authlog:
     read_auth_lines = authlog.readlines()
-with open("messages", "r") as messages:
-    read_msg_lines = messages.readlines()
-with open("syslog", "r") as syslog:
+with open("/var/log/messages", "r") as messages:
+    read_msg_lines = message.readlines()
+with open("/var/log/syslog", "r") as syslog:
     read_sys_lines = syslog.readlines()
 
 class FileSearch(EasyFrame):
