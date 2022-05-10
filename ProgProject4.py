@@ -39,19 +39,19 @@ class FileSearch(EasyFrame):
 
         self.addLabel(font = ("Avenir", 16, "italic"), text = "Log file:", row = 2, column = 0, sticky = "NEW", background = bg)
         logFile = self.logFile = self.addTextField(text = "", row = 2, column = 3, sticky = "NEW", state = "readonly")
-        logFile["foreground"] = "black"
+        #logFile["foreground"] = "black"
 
         self.addLabel(font = ("Avenir", 16, "italic"), text = "Date of First Record:", row = 2, column = 0, sticky = "EW", background = bg)
         firstRecord = self.firstDate = self.addTextField(text = "", row = 2, column = 3, sticky = "EW", state = "readonly")
-        firstRecord["foreground"] = "black"
+        #firstRecord["foreground"] = "black"
 
         self.addLabel(font = ("Avenir", 16, "italic"), text = "Date of Last Record:", row = 2, column = 0, columnspan = 2, sticky = "SEW", background = bg)
         lastRecord = self.lastDate = self.addTextField(text = "", row = 2, column = 3, sticky = "SEW", state = "readonly")
-        lastRecord["foreground"] = "black"
+        #lastRecord["foreground"] = "black"
 
         self.addLabel(font = ("Avenir", 16, "italic"), text = "Number of Records:", row = 3, column = 0, columnspan = 2, sticky = "NEW", background = bg)
         numRecords = self.numRecords = self.addTextField(text = "", row = 3, column = 3, sticky = "NEW", state = "readonly")
-        numRecords["foreground"] = "black"
+        #numRecords["foreground"] = "black"
 
         self.addLabel(font = ("Avenir", 16), text = "Relavent Records", row = 3, column = 0, columnspan = 5, sticky = "SEW", background = bg)
         listBox = self.loginAttempts = self.addListbox(row = 4, column = 3)
@@ -59,12 +59,13 @@ class FileSearch(EasyFrame):
         listBox["background"] = "black"    
 
         menuBar = self.addMenuBar(row = 4, column = 4)
-        fileMenu = menuBar.addMenu("          Select the file          ")
+        fileMenu = menuBar.addMenu("Select file / Enter new file")
         fileMenu["foreground"] = "black"
-        fileMenu["font"] = "Avenir", 15
-        fileMenu.addMenuItem("auth.log", command = self.authlog)
-        fileMenu.addMenuItem("messages", command = self.messages)
-        fileMenu.addMenuItem("syslog", command = self.syslog)
+        fileMenu["font"] = "Avenir", 13
+        fileMenu.addMenuItem("Auth.log", command = self.authlog)
+        fileMenu.addMenuItem("Messages", command = self.messages)
+        fileMenu.addMenuItem("Syslog", command = self.syslog)
+        fileMenu.addMenuItem("Enter a new file", command = self.newFile)
     
     def authlog(self):
         first_auth_line = read_auth_lines[0]
@@ -72,6 +73,7 @@ class FileSearch(EasyFrame):
         total_lines = 0
 
         self.loginAttempts.clear()
+        self.logFile["state"] = "readonly"
         for i in (read_auth_lines):
             total_lines += 1
             first_date = first_auth_line[:15]
@@ -90,6 +92,7 @@ class FileSearch(EasyFrame):
         total_lines = 0
 
         self.loginAttempts.clear()
+        self.logFile["state"] = "readonly"
         for i in (read_msg_lines):
             total_lines += 1
             first_date = first_msg_line[:15]
@@ -108,6 +111,7 @@ class FileSearch(EasyFrame):
         total_lines = 0
 
         self.loginAttempts.clear()
+        self.logFile["state"] = "readonly"
         for i in (read_sys_lines):
             total_lines += 1
             first_date = first_sys_line[:15]
@@ -119,6 +123,38 @@ class FileSearch(EasyFrame):
             
             if "rtkit" in i:
                 self.loginAttempts.insert(END, i)
+
+    def newFile(self):
+        self.logFile.setText("")
+        self.logFile["state"] = "normal"
+        self.logFile.setText("Enter new file path here")
+
+        searchButton = self.button = self.addButton(text = "Search new file", row = 3, column = 3, command = self.search)
+        searchButton["foreground"] = "black"
+        searchButton["font"] = "Avenir", 15
+
+        self.loginAttempts.clear()
+        self.firstDate.setText("")
+        self.lastDate.setText("")
+        self.numRecords.setText("")
+       
+    def search(self): 
+        new_file = open(self.logFile.getText(), "r")
+        read_newfile_lines = new_file.readlines()
+        first_newfile_line = read_newfile_lines[0]
+        last_newfile_line = read_newfile_lines[-1]
+        total_lines = 0
+
+        for i in (read_newfile_lines):
+            total_lines += 1
+            first_date = first_newfile_line[:15]
+            last_date = last_newfile_line[:15]
+            self.firstDate.setText(first_date)
+            self.lastDate.setText(last_date)
+            self.numRecords.setText(total_lines)
+
+            self.loginAttempts.insert(END, i)
+        self.button.destroy()
             
 def main():
     FileSearch().mainloop()
